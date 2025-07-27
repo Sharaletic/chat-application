@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
         return Scaffold(
           body: child,
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: context.text.colorSettingsButton,
+            selectedItemColor: context.color.colorSettingsButton,
             unselectedItemColor: AppColors.whiteColor,
             currentIndex: tabsRouter.activeIndex,
             onTap: (index) {

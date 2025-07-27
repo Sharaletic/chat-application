@@ -16,7 +16,7 @@ class ContainerBaseWidget extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: context.text.colorSettingsButton,
+        color: context.color.colorSettingsButton,
       ),
       child: child,
     );
