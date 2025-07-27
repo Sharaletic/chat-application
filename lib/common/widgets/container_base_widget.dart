@@ -1,3 +1,4 @@
+import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:flutter/material.dart';
 
 class ContainerBaseWidget extends StatelessWidget {
@@ -11,12 +12,11 @@ class ContainerBaseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: theme.primaryColor,
         borderRadius: BorderRadius.circular(12),
+        color: context.text.colorSettingsButton,
       ),
       child: child,
     );

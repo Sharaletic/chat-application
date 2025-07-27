@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_application/common/app_router/app_router.gr.dart';
 import 'package:chat_application/common/colors/app_colors.dart';
+import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -9,7 +10,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return AutoTabsRouter(
       routes: const [ChatRoute(), SettingsRoute()],
       transitionBuilder: (context, child, animation) =>
@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
         return Scaffold(
           body: child,
           bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: theme.primaryColor,
+            selectedItemColor: context.text.colorSettingsButton,
             unselectedItemColor: AppColors.whiteColor,
             currentIndex: tabsRouter.activeIndex,
             onTap: (index) {

@@ -1,4 +1,5 @@
 import 'package:chat_application/common/app_router/app_router.gr.dart';
+import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/presentation/settings/widgets/setting_toggle_card.dart';
@@ -32,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
             SliverAppBar(
               snap: true,
               floating: true,
-              title: Text('Settings'),
+              title: Text('Settings', style: context.text.labelStyle),
               centerTitle: true,
               elevation: 0,
               surfaceTintColor: Colors.transparent,
