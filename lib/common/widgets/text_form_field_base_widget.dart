@@ -1,4 +1,4 @@
-import 'package:chat_application/common/colors/app_colors.dart';
+import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:flutter/material.dart';
 
 class TextFormFieldBaseWidget extends StatelessWidget {

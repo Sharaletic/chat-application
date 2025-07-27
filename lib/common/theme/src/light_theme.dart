@@ -1,4 +1,4 @@
-import 'package:chat_application/common/colors/app_colors.dart';
+import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:chat_application/common/theme/src/text_theme.dart';
 import 'package:chat_application/common/theme/src/theme_colors.dart';
 import 'package:chat_application/common/theme/src/theme_text_styles.dart';

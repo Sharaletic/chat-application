@@ -1,6 +1,7 @@
 import 'package:chat_application/common/app_router/app_router.gr.dart';
-import 'package:chat_application/common/colors/app_colors.dart';
+import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
+import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:chat_application/common/widgets/elevated_button_base_widget.dart';
 import 'package:chat_application/common/widgets/snack_bar_base_widget.dart';
 import 'package:chat_application/common/widgets/text_form_field_base_widget.dart';
@@ -43,6 +44,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.color.authBackgroundColor,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) => _signUpBlocListener(state, context),
         child: Padding(
@@ -78,8 +80,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           });
                         },
                         icon: isObscureText
-                            ? Icon(Icons.visibility_off)
-                            : Icon(Icons.visibility),
+                            ? Icon(
+                                Icons.visibility_off,
+                                color: AppColors.primaryColor,
+                              )
+                            : Icon(
+                                Icons.visibility,
+                                color: AppColors.primaryColor,
+                              ),
                       ),
                       validator: (value) {
                         return _passwordValidator(value);
@@ -113,7 +121,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           onTap: () {
                             context.router.push(const LoginRoute());
                           },
-                          child: Text('You already have an account? Enter'),
+                          child: Text(
+                            'You already have an account? Enter',
+                            style: context.text.displayMedium,
+                          ),
                         ),
                       ],
                     ),

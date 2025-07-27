@@ -2,13 +2,21 @@ import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:flutter/material.dart';
 
 class ThemeColors extends ThemeExtension<ThemeColors> {
-  ThemeColors({required this.colorSettingsButton});
+  ThemeColors({
+    required this.colorSettingsButton,
+    required this.authBackgroundColor,
+  });
   final Color colorSettingsButton;
+  final Color authBackgroundColor;
 
   @override
-  ThemeExtension<ThemeColors> copyWith({Color? colorSettingsButton}) {
+  ThemeExtension<ThemeColors> copyWith({
+    Color? colorSettingsButton,
+    Color? authBackgroundColor,
+  }) {
     return ThemeColors(
       colorSettingsButton: colorSettingsButton ?? this.colorSettingsButton,
+      authBackgroundColor: authBackgroundColor ?? this.authBackgroundColor,
     );
   }
 
@@ -26,10 +34,21 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
         other.colorSettingsButton,
         t,
       )!,
+      authBackgroundColor: Color.lerp(
+        authBackgroundColor,
+        other.authBackgroundColor,
+        t,
+      )!,
     );
   }
 
-  static get ligth => ThemeColors(colorSettingsButton: AppColors.primaryColor);
+  static get ligth => ThemeColors(
+    colorSettingsButton: AppColors.primaryColor,
+    authBackgroundColor: AppColors.blackColor,
+  );
 
-  static get dark => ThemeColors(colorSettingsButton: AppColors.primaryColor);
+  static get dark => ThemeColors(
+    colorSettingsButton: AppColors.primaryColor,
+    authBackgroundColor: AppColors.blackColor,
+  );
 }

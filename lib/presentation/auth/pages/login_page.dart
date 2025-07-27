@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_application/common/app_router/app_router.gr.dart';
-import 'package:chat_application/common/colors/app_colors.dart';
+import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
+import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:chat_application/common/widgets/elevated_button_base_widget.dart';
 import 'package:chat_application/common/widgets/snack_bar_base_widget.dart';
 import 'package:chat_application/common/widgets/text_form_field_base_widget.dart';
@@ -44,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.color.authBackgroundColor,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) => _loginBlocListener(state, context),
         child: Padding(

@@ -1,4 +1,4 @@
-import 'package:chat_application/common/colors/app_colors.dart';
+import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:chat_application/common/widgets/container_base_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

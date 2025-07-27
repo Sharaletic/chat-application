@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_application/common/app_router/app_router.gr.dart';
-import 'package:chat_application/common/colors/app_colors.dart';
 import 'package:chat_application/common/extencions/theme_extencions.dart';
+import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()

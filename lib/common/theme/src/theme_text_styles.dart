@@ -6,22 +6,25 @@ class ThemeTextStyles extends ThemeExtension<ThemeTextStyles> {
     required this.appTitle,
     required this.appDescription,
     required this.labelStyle,
+    required this.displayMedium,
   });
   final TextStyle appTitle;
   final TextStyle appDescription;
   final TextStyle labelStyle;
+  final TextStyle displayMedium;
 
   @override
   ThemeExtension<ThemeTextStyles> copyWith({
     TextStyle? appTitle,
     TextStyle? appDescription,
     TextStyle? labelStyle,
-    Color? colorSettingsButton,
+    TextStyle? displayMedium,
   }) {
     return ThemeTextStyles(
       appTitle: appTitle ?? this.appTitle,
       appDescription: appDescription ?? this.appDescription,
       labelStyle: labelStyle ?? this.labelStyle,
+      displayMedium: displayMedium ?? this.displayMedium,
     );
   }
 
@@ -37,6 +40,7 @@ class ThemeTextStyles extends ThemeExtension<ThemeTextStyles> {
       appTitle: TextStyle.lerp(appTitle, other.appTitle, t)!,
       appDescription: TextStyle.lerp(appDescription, other.appDescription, t)!,
       labelStyle: TextStyle.lerp(labelStyle, other.labelStyle, t)!,
+      displayMedium: TextStyle.lerp(displayMedium, other.displayMedium, t)!,
     );
   }
 
@@ -50,6 +54,7 @@ class ThemeTextStyles extends ThemeExtension<ThemeTextStyles> {
       fontWeight: FontWeight.w500,
     ),
     labelStyle: textLine1.copyWith(fontWeight: FontWeight.w500, fontSize: 20),
+    displayMedium: textLine2.copyWith(color: AppColors.whiteColor),
   );
 
   static get dark => ThemeTextStyles(
@@ -62,5 +67,6 @@ class ThemeTextStyles extends ThemeExtension<ThemeTextStyles> {
       fontWeight: FontWeight.w500,
     ),
     labelStyle: textLine2.copyWith(fontWeight: FontWeight.w500, fontSize: 20),
+    displayMedium: textLine2.copyWith(color: AppColors.whiteColor),
   );
 }
