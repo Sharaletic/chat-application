@@ -81,8 +81,14 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                         icon: isObscureText
-                            ? Icon(Icons.visibility_off)
-                            : Icon(Icons.visibility),
+                            ? Icon(
+                                Icons.visibility_off,
+                                color: AppColors.greyColor,
+                              )
+                            : Icon(
+                                Icons.visibility,
+                                color: AppColors.greyColor,
+                              ),
                       ),
                       validator: (value) {
                         return _passwordValidator(value);

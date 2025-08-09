@@ -15,11 +15,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>((event, emit) async {
       switch (event) {
         case _SignUp():
-          await _signUp(event, emit);
+          await _onSignUp(event, emit);
         case _Login():
           await _onLogin(event, emit);
         case _SignOut():
-          await _signOut(event, emit);
+          await _onSignOut(event, emit);
       }
     });
   }
@@ -38,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _signUp(_SignUp event, Emitter<AuthState> emit) async {
+  Future<void> _onSignUp(_SignUp event, Emitter<AuthState> emit) async {
     emit(AuthState.loading());
     try {
       await _authRepository.createUserWithEmailAndPassword(
@@ -51,7 +51,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _signOut(_SignOut event, Emitter<AuthState> emit) async {
+  Future<void> _onSignOut(_SignOut event, Emitter<AuthState> emit) async {
     emit(AuthState.loading());
     try {
       await _authRepository.signOut();

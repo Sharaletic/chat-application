@@ -82,11 +82,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         icon: isObscureText
                             ? Icon(
                                 Icons.visibility_off,
-                                color: AppColors.primaryColor,
+                                color: AppColors.greyColor,
                               )
                             : Icon(
                                 Icons.visibility,
-                                color: AppColors.primaryColor,
+                                color: AppColors.greyColor,
                               ),
                       ),
                       validator: (value) {
