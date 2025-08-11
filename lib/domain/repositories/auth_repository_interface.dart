@@ -1,5 +1,6 @@
 abstract interface class AuthRepositoryInterface {
   Future<void> createUserWithEmailAndPassword({
+    required String userName,
     required String emailAddress,
     required String password,
   });

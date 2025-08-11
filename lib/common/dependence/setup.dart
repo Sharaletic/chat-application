@@ -1,13 +1,12 @@
 import 'package:chat_application/common/app_router/app_router.dart';
+import 'package:chat_application/common/api/api_client.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
-import 'package:chat_application/common/state_management/chat/bloc/chat_bloc.dart';
+import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/repository/theme_repository.dart';
 import 'package:chat_application/common/theme/repository/theme_repository_interface.dart';
 import 'package:chat_application/data/repositories/auth_repository.dart';
-import 'package:chat_application/data/repositories/chat_repository.dart';
 import 'package:chat_application/domain/repositories/auth_repository_interface.dart';
-import 'package:chat_application/domain/repositories/chat_repository_interface.dart';
 import 'package:chat_application/firebase_options.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,9 +25,6 @@ Future<void> setup() async {
   final credential = FirebaseAuth.instance;
   getIt.registerLazySingleton<FirebaseAuth>(() => credential);
 
-  final channel = WebSocketChannel.connect(Uri.parse('ws://localhost:3000'));
-  getIt.registerLazySingleton<WebSocketChannel>(() => channel);
-
   getIt.registerSingleton<Routers>(Routers());
 
   final prefs = await SharedPreferences.getInstance();
@@ -37,9 +33,10 @@ Future<void> setup() async {
   final dio = Dio();
   getIt.registerLazySingleton<Dio>(() => dio);
 
+  getIt.registerLazySingleton<ApiClient>(() => ApiClient(dio: getIt<Dio>()));
+
   _initTheme();
   _initAuth();
-  _initChat();
 }
 
 void _initTheme() {
@@ -56,21 +53,11 @@ void _initAuth() {
   getIt.registerLazySingleton<AuthRepositoryInterface>(
     () => AuthRepository(
       instance: getIt<FirebaseAuth>(),
-      sharedPreferences: getIt<SharedPreferences>(),
+      apiClient: getIt<ApiClient>(),
     ),
   );
 
   getIt.registerFactory<AuthBloc>(
     () => AuthBloc(authRepository: getIt<AuthRepositoryInterface>()),
-  );
-}
-
-void _initChat() {
-  getIt.registerLazySingleton<ChatRepositoryInterface>(
-    () => ChatRepository(channel: getIt<WebSocketChannel>()),
-  );
-
-  getIt.registerFactory<ChatBloc>(
-    () => ChatBloc(ws: getIt<WebSocketChannel>()),
   );
 }

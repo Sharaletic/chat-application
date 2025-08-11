@@ -2,7 +2,7 @@ import 'package:chat_application/common/api/api_client.dart';
 import 'package:chat_application/common/app_router/app_router.dart';
 import 'package:chat_application/common/dependence/setup.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
-import 'package:chat_application/common/state_management/chat/bloc/chat_bloc.dart';
+import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/src/dark_theme.dart';
 import 'package:chat_application/common/theme/src/light_theme.dart';
@@ -13,11 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() async {
   await setup();
 
-  final da = await ApiClient(
-    dio: Dio(),
-  ).getMessages(chatId: '25c73041-8d62-43b2-8a85-4997cb577b8d');
+  ApiClient(dio: Dio()).createMember(id: 'Cwn5FKTs1cMO7cjokWdF5aZaz9k1');
 
-  print(da);
   runApp(const MyApp());
 }
 
@@ -32,7 +29,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(create: (context) => getIt<AuthBloc>()),
         BlocProvider<ThemeCubit>(create: (context) => getIt<ThemeCubit>()),
-        BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
+        // BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

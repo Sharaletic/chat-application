@@ -19,13 +19,20 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final _key = GlobalKey<FormState>();
+  final _nameUserController = TextEditingController();
   final _emailAddressController = TextEditingController();
   final _passwordController = TextEditingController();
+  String nameUserText = '';
   String emailAddressText = '';
   bool isObscureText = true;
 
   @override
   void initState() {
+    _nameUserController.addListener(() {
+      setState(() {
+        nameUserText = _nameUserController.text;
+      });
+    });
     _emailAddressController.addListener(() {
       setState(() {
         emailAddressText = _emailAddressController.text;
@@ -36,6 +43,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   void dispose() {
+    _nameUserController.dispose();
     _emailAddressController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -57,12 +65,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextFormFieldBaseWidget(
+                      controller: _nameUserController,
+                      hintText: 'Your name',
+                      suffixIcon: nameUserText.isNotEmpty
+                          ? IconButton(
+                              onPressed: () =>
+                                  _textControllerClear(_nameUserController),
+                              icon: Icon(Icons.clear),
+                            )
+                          : null,
+                      validator: (value) => _emailAddressValidator(value),
+                    ),
+                    const SizedBox(height: 15),
+                    TextFormFieldBaseWidget(
                       controller: _emailAddressController,
                       keyboardType: TextInputType.emailAddress,
                       hintText: 'Your email address',
                       suffixIcon: emailAddressText.isNotEmpty
                           ? IconButton(
-                              onPressed: () => _emailAddressClear(),
+                              onPressed: () =>
+                                  _textControllerClear(_emailAddressController),
                               icon: Icon(Icons.clear),
                             )
                           : null,
@@ -138,9 +160,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  void _emailAddressClear() {
+  void _textControllerClear(TextEditingController controller) {
     setState(() {
-      _emailAddressController.clear();
+      controller.clear();
     });
   }
 
@@ -157,6 +179,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (_key.currentState!.validate()) {
       context.read<AuthBloc>().add(
         AuthEvent.signUp(
+          userName: _nameUserController.text,
           emailAddress: _emailAddressController.text,
           password: _passwordController.text,
         ),

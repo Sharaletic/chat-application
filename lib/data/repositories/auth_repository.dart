@@ -1,3 +1,4 @@
+import 'package:chat_application/common/api/api_client.dart';
 import 'package:chat_application/common/error/login_failure.dart';
 import 'package:chat_application/common/error/sign_up_failure.dart';
 import 'package:chat_application/domain/repositories/auth_repository_interface.dart';
@@ -5,20 +6,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository implements AuthRepositoryInterface {
-  AuthRepository({required this.instance, required this.sharedPreferences});
-  final FirebaseAuth instance;
-  final SharedPreferences sharedPreferences;
+  AuthRepository({required FirebaseAuth instance, required ApiClient apiClient})
+    : _instance = instance,
+      _apiClient = apiClient;
+  final FirebaseAuth _instance;
+  final ApiClient _apiClient;
 
   @override
   Future<void> createUserWithEmailAndPassword({
+    required String userName,
     required String emailAddress,
     required String password,
   }) async {
     try {
-      await instance.createUserWithEmailAndPassword(
+      final userCredential = await _instance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+      await userCredential.user?.updateDisplayName(userName);
+      final id = _instance.currentUser!.uid;
+      _apiClient.createMember(id: id);
     } on FirebaseAuthException catch (e) {
       throw SignUpFailure.fromCode(e.code);
     } catch (_) {
@@ -32,7 +39,7 @@ class AuthRepository implements AuthRepositoryInterface {
     required String password,
   }) async {
     try {
-      await instance.signInWithEmailAndPassword(
+      await _instance.signInWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
@@ -45,6 +52,6 @@ class AuthRepository implements AuthRepositoryInterface {
 
   @override
   Future<void> signOut() async {
-    await instance.signOut();
+    await _instance.signOut();
   }
 }

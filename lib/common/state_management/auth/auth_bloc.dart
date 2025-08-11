@@ -42,6 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthState.loading());
     try {
       await _authRepository.createUserWithEmailAndPassword(
+        userName: event.userName,
         emailAddress: event.emailAddress,
         password: event.password,
       );
