@@ -1,8 +1,8 @@
-import 'package:chat_application/common/api/api_client.dart';
 import 'package:chat_application/common/app_router/app_router.dart';
 import 'package:chat_application/common/dependence/setup.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
+import 'package:chat_application/common/state_management/members/members_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/src/dark_theme.dart';
 import 'package:chat_application/common/theme/src/light_theme.dart';
@@ -12,9 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   await setup();
-
-  ApiClient(dio: Dio()).createMember(id: 'Cwn5FKTs1cMO7cjokWdF5aZaz9k1');
-
   runApp(const MyApp());
 }
 
@@ -29,7 +26,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(create: (context) => getIt<AuthBloc>()),
         BlocProvider<ThemeCubit>(create: (context) => getIt<ThemeCubit>()),
-        // BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
+        BlocProvider<MembersBloc>(create: (context) => getIt<MembersBloc>()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

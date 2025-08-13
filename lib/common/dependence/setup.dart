@@ -2,11 +2,14 @@ import 'package:chat_application/common/app_router/app_router.dart';
 import 'package:chat_application/common/api/api_client.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
+import 'package:chat_application/common/state_management/members/members_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/repository/theme_repository.dart';
 import 'package:chat_application/common/theme/repository/theme_repository_interface.dart';
 import 'package:chat_application/data/repositories/auth_repository.dart';
+import 'package:chat_application/data/repositories/members_repository.dart';
 import 'package:chat_application/domain/repositories/auth_repository_interface.dart';
+import 'package:chat_application/domain/repositories/members_repository_interface.dart';
 import 'package:chat_application/firebase_options.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,10 +36,13 @@ Future<void> setup() async {
   final dio = Dio();
   getIt.registerLazySingleton<Dio>(() => dio);
 
-  getIt.registerLazySingleton<ApiClient>(() => ApiClient(dio: getIt<Dio>()));
+  getIt.registerLazySingleton<ApiClient>(
+    () => ApiClient(dio: getIt<Dio>(), instance: getIt<FirebaseAuth>()),
+  );
 
   _initTheme();
   _initAuth();
+  _initMembers();
 }
 
 void _initTheme() {
@@ -59,5 +65,15 @@ void _initAuth() {
 
   getIt.registerFactory<AuthBloc>(
     () => AuthBloc(authRepository: getIt<AuthRepositoryInterface>()),
+  );
+}
+
+void _initMembers() {
+  getIt.registerLazySingleton<MembersRepositoryInterface>(
+    () => MembersRepository(apiClient: getIt<ApiClient>()),
+  );
+
+  getIt.registerFactory<MembersBloc>(
+    () => MembersBloc(membersRepository: getIt<MembersRepositoryInterface>()),
   );
 }
