@@ -25,7 +25,11 @@ class AuthRepository implements AuthRepositoryInterface {
       );
       await userCredential.user?.updateDisplayName(userName);
       final id = _instance.currentUser!.uid;
-      _apiClient.createMember(id: id);
+      _apiClient.createMember(
+        id: id,
+        userName: userName,
+        emailAddress: emailAddress,
+      );
     } on FirebaseAuthException catch (e) {
       throw SignUpFailure.fromCode(e.code);
     } catch (_) {

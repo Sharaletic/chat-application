@@ -14,7 +14,7 @@ class ThemeRepository implements ThemeRepositoryInterface {
       final selected = sharedPreferences.getBool(userId);
       return selected ?? false;
     }
-    return false;
+    return true;
   }
 
   @override

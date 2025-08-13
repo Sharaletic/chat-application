@@ -74,7 +74,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               icon: Icon(Icons.clear),
                             )
                           : null,
-                      validator: (value) => _emailAddressValidator(value),
+                      validator: (value) => _userNameValidator(value),
                     ),
                     const SizedBox(height: 15),
                     TextFormFieldBaseWidget(
@@ -93,7 +93,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     const SizedBox(height: 15),
                     TextFormFieldBaseWidget(
                       controller: _passwordController,
-                      hintText: 'Your email address',
+                      hintText: 'Your password',
                       isObscureText: isObscureText,
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -185,6 +185,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ),
       );
     }
+  }
+
+  String? _userNameValidator(String? value) {
+    if (value!.isEmpty) {
+      return 'Enter your user name';
+    }
+    return null;
   }
 
   String? _emailAddressValidator(String? value) {
