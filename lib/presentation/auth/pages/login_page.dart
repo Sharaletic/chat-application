@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_application/common/app_router/app_router.gr.dart';
 import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
@@ -10,7 +9,6 @@ import 'package:chat_application/common/widgets/text_form_field_base_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-@RoutePage()
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -136,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
         SnackBarBaseWidget.showSnackBar(context, state.message);
       case Success():
         context.read<ThemeCubit>().checkSelectedTheme();
-        context.router.push(const ChatRoute());
+        context.router.replace(const NamedRoute('ChatRoute'));
     }
   }
 

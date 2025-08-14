@@ -28,7 +28,8 @@ Future<void> setup() async {
   final credential = FirebaseAuth.instance;
   getIt.registerLazySingleton<FirebaseAuth>(() => credential);
 
-  getIt.registerSingleton<Routers>(Routers());
+  // getIt.registerSingleton<Routers>(Routers());
+  getIt.registerSingleton<AppRouter>(AppRouter());
 
   final prefs = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => prefs);

@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final router = getIt<Routers>();
+    print('not');
+
+    final router = getIt<AppRouter>();
+    print('ok');
 
     return MultiBlocProvider(
       providers: [

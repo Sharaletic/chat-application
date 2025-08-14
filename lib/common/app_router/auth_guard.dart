@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_application/common/app_router/app_router.gr.dart';
 import 'package:chat_application/common/dependence/setup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -18,14 +17,7 @@ class AuthGuard extends AutoRouteGuard {
     if (user != null) {
       resolver.next(true);
     } else {
-      resolver.redirectUntil(const RegistrationRoute());
+      resolver.redirectUntil(const NamedRoute('RegistrationRoute'));
     }
-    // session.listen((User? user) {
-    //   if (user != null) {
-    //     resolver.next(true);
-    //   } else {
-    //     resolver.redirectUntil(const RegistrationRoute());
-    //   }
-    // });
   }
 }
