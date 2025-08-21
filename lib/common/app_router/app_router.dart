@@ -3,6 +3,7 @@ import 'package:chat_application/common/app_router/auth_guard.dart';
 import 'package:chat_application/presentation/auth/pages/login_page.dart';
 import 'package:chat_application/presentation/auth/pages/registration_page.dart';
 import 'package:chat_application/presentation/chat/pages/chat_page.dart';
+import 'package:chat_application/presentation/chat/pages/conversation_page.dart';
 import 'package:chat_application/presentation/home/pages/home_page.dart';
 import 'package:chat_application/presentation/settings/pages/settings_page.dart';
 
@@ -45,6 +46,16 @@ class AppRouter extends RootStackRouter {
       path: '/login',
       builder: (context, data) {
         return LoginPage();
+      },
+    ),
+    NamedRouteDef(
+      name: 'ConversationRoute',
+      path: '/conversation',
+      builder: (context, data) {
+        return ConversationPage(
+          recipientId: data.params.getString('recipientId'),
+          recipientName: data.params.getString('recipientName'),
+        );
       },
     ),
   ];

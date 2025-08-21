@@ -1,5 +1,5 @@
 import 'package:chat_application/common/app_router/app_router.dart';
-import 'package:chat_application/common/api/api_client.dart';
+import 'package:chat_application/common/api/api_client/api_client.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
 import 'package:chat_application/common/state_management/members/members_bloc.dart';
@@ -17,7 +17,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 final getIt = GetIt.instance;
 
@@ -28,7 +27,6 @@ Future<void> setup() async {
   final credential = FirebaseAuth.instance;
   getIt.registerLazySingleton<FirebaseAuth>(() => credential);
 
-  // getIt.registerSingleton<Routers>(Routers());
   getIt.registerSingleton<AppRouter>(AppRouter());
 
   final prefs = await SharedPreferences.getInstance();
@@ -44,6 +42,7 @@ Future<void> setup() async {
   _initTheme();
   _initAuth();
   _initMembers();
+  _initChat();
 }
 
 void _initTheme() {
@@ -76,5 +75,11 @@ void _initMembers() {
 
   getIt.registerFactory<MembersBloc>(
     () => MembersBloc(membersRepository: getIt<MembersRepositoryInterface>()),
+  );
+}
+
+void _initChat() {
+  getIt.registerFactory<ChatBloc>(
+    () => ChatBloc(apiClient: getIt<ApiClient>()),
   );
 }

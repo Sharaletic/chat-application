@@ -6,7 +6,6 @@ import 'package:chat_application/common/state_management/members/members_bloc.da
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/src/dark_theme.dart';
 import 'package:chat_application/common/theme/src/light_theme.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,16 +19,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('not');
-
     final router = getIt<AppRouter>();
-    print('ok');
-
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthBloc>(create: (context) => getIt<AuthBloc>()),
         BlocProvider<ThemeCubit>(create: (context) => getIt<ThemeCubit>()),
         BlocProvider<MembersBloc>(create: (context) => getIt<MembersBloc>()),
+        BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
