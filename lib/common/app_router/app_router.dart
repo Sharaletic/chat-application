@@ -53,6 +53,7 @@ class AppRouter extends RootStackRouter {
       path: '/conversation',
       builder: (context, data) {
         return ConversationPage(
+          chatId: data.params.optString('chatId'),
           recipientId: data.params.getString('recipientId'),
           recipientName: data.params.getString('recipientName'),
         );

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chat_application/data/dtos/message_dto/message_dto.dart';
 import 'package:chat_application/data/dtos/user_dto.dart/user_dto.dart';
 import 'package:chat_application/domain/models/message_model.dart';
@@ -82,5 +84,26 @@ class ApiClient {
     );
     final chatId = response.data['chatId'] as String;
     return chatId;
+  }
+
+  void joinChat({required String chatId}) {
+    final String userName = _instance.currentUser!.displayName!;
+    final message = {
+      'type': 'join_chat',
+      'payload': {'userName': userName, 'chatId': chatId},
+    };
+    _channel!.sink.add(jsonEncode(message));
+  }
+
+  void sendMessage({required String message, required String chatId}) {
+    final responce = {
+      'type': 'send_message',
+      'payload': {
+        'message': message,
+        'chatId': chatId,
+        'createdTime': DateTime.now().toString(),
+      },
+    };
+    _channel!.sink.add(jsonEncode(responce));
   }
 }
