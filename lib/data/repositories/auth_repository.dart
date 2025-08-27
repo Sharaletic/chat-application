@@ -1,9 +1,9 @@
-import 'package:chat_application/common/api/api_client.dart';
+import 'package:chat_application/common/api/api_client/api_client.dart';
 import 'package:chat_application/common/error/login_failure.dart';
 import 'package:chat_application/common/error/sign_up_failure.dart';
+import 'package:chat_application/domain/models/user_model.dart';
 import 'package:chat_application/domain/repositories/auth_repository_interface.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository implements AuthRepositoryInterface {
   AuthRepository({required FirebaseAuth instance, required ApiClient apiClient})
@@ -13,7 +13,7 @@ class AuthRepository implements AuthRepositoryInterface {
   final ApiClient _apiClient;
 
   @override
-  Future<void> createUserWithEmailAndPassword({
+  Future<AuthenticatedUser> createUserWithEmailAndPassword({
     required String userName,
     required String emailAddress,
     required String password,
@@ -30,6 +30,13 @@ class AuthRepository implements AuthRepositoryInterface {
         userName: userName,
         emailAddress: emailAddress,
       );
+      final currentUser = userCredential.user;
+      return AuthenticatedUser(
+        uid: currentUser!.uid,
+        displayName: currentUser.displayName,
+        photoURL: currentUser.photoURL,
+        email: currentUser.email,
+      );
     } on FirebaseAuthException catch (e) {
       throw SignUpFailure.fromCode(e.code);
     } catch (_) {
@@ -38,14 +45,21 @@ class AuthRepository implements AuthRepositoryInterface {
   }
 
   @override
-  Future<void> signInWithEmailAndPassword({
+  Future<AuthenticatedUser> signInWithEmailAndPassword({
     required String emailAddress,
     required String password,
   }) async {
     try {
-      await _instance.signInWithEmailAndPassword(
+      final userCredential = await _instance.signInWithEmailAndPassword(
         email: emailAddress,
         password: password,
+      );
+      final currentUser = userCredential.user;
+      return AuthenticatedUser(
+        uid: currentUser!.uid,
+        displayName: currentUser.displayName,
+        photoURL: currentUser.photoURL,
+        email: currentUser.email,
       );
     } on FirebaseAuthException catch (e) {
       throw LoginFailure.fromCode(e.code);

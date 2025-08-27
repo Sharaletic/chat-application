@@ -1,9 +1,10 @@
 import 'dart:convert';
-
+import 'package:chat_application/data/dtos/chat_dto/chat_dto.dart';
 import 'package:chat_application/data/dtos/message_dto/message_dto.dart';
-import 'package:chat_application/data/dtos/user_dto.dart/user_dto.dart';
+import 'package:chat_application/data/dtos/user_dto.dart/member_dto.dart';
+import 'package:chat_application/domain/models/chat_model.dart';
 import 'package:chat_application/domain/models/message_model.dart';
-import 'package:chat_application/domain/models/user_model.dart';
+import 'package:chat_application/domain/models/member_model.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -51,18 +52,18 @@ class ApiClient {
     );
   }
 
-  Future<List<UserModel>> getMembers() async {
-    final id = _instance.currentUser!.uid;
+  Future<List<MemberModel>> getMembers() async {
+    final currentUserId = _instance.currentUser!.uid;
     final response = await _dio.get(
       'http://localhost:3000/api/members',
-      data: {'currentUserId': id},
+      data: {'currentUserId': currentUserId},
     );
 
     final List<Map<String, dynamic>> jsonList = response.data
         .cast<Map<String, dynamic>>();
 
     final members = jsonList
-        .map((member) => UserDto.fromJson(member).toDomain())
+        .map((member) => MemberDto.fromJson(member).toDomain())
         .toList();
     return members;
   }
@@ -105,5 +106,19 @@ class ApiClient {
       },
     };
     _channel!.sink.add(jsonEncode(responce));
+  }
+
+  Future<List<ChatModel>> getChats() async {
+    final String currentUserId = _instance.currentUser!.uid;
+    final json = await _dio.get(
+      'http://localhost:3000/api/chats',
+      data: {'currentUserId': currentUserId},
+    );
+
+    final List<Map<String, dynamic>> jsonList = json.data
+        .cast<Map<String, dynamic>>();
+
+    final chats = jsonList.map((e) => ChatDto.fromJson(e).toDomain()).toList();
+    return chats;
   }
 }
