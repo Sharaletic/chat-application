@@ -1,5 +1,6 @@
 import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
+import 'package:chat_application/common/state_management/firebase_auth_bloc/firebase_auth_bloc.dart';
 import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:chat_application/common/widgets/elevated_button_base_widget.dart';
 import 'package:chat_application/common/widgets/snack_bar_base_widget.dart';
@@ -51,7 +52,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.color.authBackgroundColor,
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<FirebaseAuthBloc, FirebaseAuthState>(
         listener: (context, state) => _signUpBlocListener(state, context),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -123,18 +124,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       children: [
                         ElevatedButtonBaseWidget(
                           onPressed: () => _onPressedSignUpButton(context),
-                          child: BlocBuilder<AuthBloc, AuthState>(
-                            builder: (context, state) {
-                              switch (state) {
-                                case Loading():
-                                  return CircularProgressIndicator(
-                                    color: AppColors.blackColor,
+                          child:
+                              BlocBuilder<FirebaseAuthBloc, FirebaseAuthState>(
+                                builder: (context, state) {
+                                  return state.maybeMap(
+                                    loading: (_) => CircularProgressIndicator(
+                                      color: AppColors.blackColor,
+                                    ),
+                                    orElse: () => Text('Enter'),
                                   );
-                                default:
-                                  return Text('Enter');
-                              }
-                            },
-                          ),
+                                },
+                              ),
                         ),
                         SizedBox(height: 15),
                         GestureDetector(
@@ -168,19 +168,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void _signUpBlocListener(Object? state, BuildContext context) {
     switch (state) {
-      case Failure():
+      case ErrorFirebaseAuthState():
         SnackBarBaseWidget.showSnackBar(context, state.message);
-      case Success():
+      case SuccessfulFirebaseAuthState():
         context.router.replace(const NamedRoute('ChatRoute'));
     }
   }
 
   void _onPressedSignUpButton(BuildContext context) {
     if (_key.currentState!.validate()) {
-      context.read<AuthBloc>().add(
-        AuthEvent.signUp(
-          userName: _nameUserController.text,
-          emailAddress: _emailAddressController.text,
+      context.read<FirebaseAuthBloc>().add(
+        FirebaseAuthEvent.signUp(
+          displayName: _nameUserController.text,
+          email: _emailAddressController.text,
           password: _passwordController.text,
         ),
       );

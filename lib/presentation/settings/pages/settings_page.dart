@@ -1,5 +1,6 @@
 import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
+import 'package:chat_application/common/state_management/firebase_auth_bloc/firebase_auth_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/presentation/settings/widgets/setting_toggle_card.dart';
 import 'package:chat_application/presentation/settings/widgets/settings_action_card.dart';
@@ -19,10 +20,10 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final isDarkTheme = context.watch<ThemeCubit>().state.isDark;
     return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<FirebaseAuthBloc, FirebaseAuthState>(
         listener: (context, state) {
           switch (state) {
-            case Success():
+            case SuccessfulFirebaseAuthState():
               context.router.replace(const NamedRoute('RegistrationRoute'));
           }
         },
@@ -41,7 +42,9 @@ class _SettingsPageState extends State<SettingsPage> {
               child: SettingsActionCard(
                 icon: Icons.logout,
                 title: 'Logout',
-                onTap: () => context.read<AuthBloc>().add(AuthEvent.signOut()),
+                onTap: () => context.read<FirebaseAuthBloc>().add(
+                  FirebaseAuthEvent.logOut(),
+                ),
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 16)),

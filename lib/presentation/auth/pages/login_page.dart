@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:chat_application/common/extencions/theme_extencions.dart';
 import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
+import 'package:chat_application/common/state_management/firebase_auth_bloc/firebase_auth_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/src/constants.dart';
 import 'package:chat_application/common/widgets/elevated_button_base_widget.dart';
@@ -44,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.color.authBackgroundColor,
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<FirebaseAuthBloc, FirebaseAuthState>(
         listener: (context, state) => _loginBlocListener(state, context),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -99,16 +100,14 @@ class _LoginPageState extends State<LoginPage> {
                   child: SafeArea(
                     child: ElevatedButtonBaseWidget(
                       onPressed: () => _onPressedloginButton(context),
-                      child: BlocBuilder<AuthBloc, AuthState>(
+                      child: BlocBuilder<FirebaseAuthBloc, FirebaseAuthState>(
                         builder: (context, state) {
-                          switch (state) {
-                            case Loading():
-                              return CircularProgressIndicator(
-                                color: AppColors.blackColor,
-                              );
-                            default:
-                              return Text('Enter');
-                          }
+                          return state.maybeMap(
+                            loading: (_) => CircularProgressIndicator(
+                              color: AppColors.blackColor,
+                            ),
+                            orElse: () => Text('Enter'),
+                          );
                         },
                       ),
                     ),
@@ -130,9 +129,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void _loginBlocListener(Object? state, BuildContext context) {
     switch (state) {
-      case Failure():
+      case ErrorFirebaseAuthState():
         SnackBarBaseWidget.showSnackBar(context, state.message);
-      case Success():
+      case SuccessfulFirebaseAuthState():
         context.read<ThemeCubit>().checkSelectedTheme();
         context.router.replace(const NamedRoute('ChatRoute'));
     }
@@ -140,9 +139,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onPressedloginButton(BuildContext context) {
     if (_key.currentState!.validate()) {
-      context.read<AuthBloc>().add(
-        AuthEvent.login(
-          emailAddress: _emailAddressController.text,
+      context.read<FirebaseAuthBloc>().add(
+        FirebaseAuthEvent.logIn(
+          email: _emailAddressController.text,
           password: _passwordController.text,
         ),
       );

@@ -1,7 +1,7 @@
 import 'package:chat_application/common/app_router/app_router.dart';
 import 'package:chat_application/common/dependence/setup.dart';
-import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
+import 'package:chat_application/common/state_management/firebase_auth_bloc/firebase_auth_bloc.dart';
 import 'package:chat_application/common/state_management/members/members_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/src/dark_theme.dart';
@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
     final router = getIt<AppRouter>();
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBloc>(create: (context) => getIt<AuthBloc>()),
+        BlocProvider<FirebaseAuthBloc>(
+          create: (context) => getIt<FirebaseAuthBloc>(),
+        ),
         BlocProvider<ThemeCubit>(create: (context) => getIt<ThemeCubit>()),
         BlocProvider<MembersBloc>(create: (context) => getIt<MembersBloc>()),
         BlocProvider<ChatBloc>(create: (context) => getIt<ChatBloc>()),
