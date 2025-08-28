@@ -68,10 +68,7 @@ class ApiClient {
     return members;
   }
 
-  Future<String> createChat({
-    required String recipientId,
-    required String recipientName,
-  }) async {
+  Future<String> createChat({required String recipientId}) async {
     final String senderId = _instance.currentUser!.uid;
     final String senderName = _instance.currentUser!.displayName!;
     final response = await _dio.post(
@@ -80,7 +77,6 @@ class ApiClient {
         'sender_id': senderId,
         'recipient_id': recipientId,
         'senderName': senderName,
-        'recipientName': recipientName,
       },
     );
     final chatId = response.data['chatId'] as String;

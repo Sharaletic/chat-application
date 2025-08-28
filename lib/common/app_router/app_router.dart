@@ -59,7 +59,6 @@ class AppRouter extends RootStackRouter {
         return ConversationPage(
           chatId: data.params.optString('chatId'),
           recipientId: data.params.getString('recipientId'),
-          recipientName: data.params.getString('recipientName'),
         );
       },
     ),

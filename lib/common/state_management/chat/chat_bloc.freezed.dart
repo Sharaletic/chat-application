@@ -55,12 +55,13 @@ extension ChatEventPatterns on ChatEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _CreateChatChatEvent value)?  createChat,TResult Function( _JoinChatChatEvent value)?  joinChat,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _CreateChatChatEvent value)?  createChat,TResult Function( _JoinChatChatEvent value)?  joinChat,TResult Function( _LoadChatChatEvent value)?  load,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _CreateChatChatEvent() when createChat != null:
 return createChat(_that);case _JoinChatChatEvent() when joinChat != null:
-return joinChat(_that);case _:
+return joinChat(_that);case _LoadChatChatEvent() when load != null:
+return load(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return joinChat(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _CreateChatChatEvent value)  createChat,required TResult Function( _JoinChatChatEvent value)  joinChat,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _CreateChatChatEvent value)  createChat,required TResult Function( _JoinChatChatEvent value)  joinChat,required TResult Function( _LoadChatChatEvent value)  load,}){
 final _that = this;
 switch (_that) {
 case _CreateChatChatEvent():
 return createChat(_that);case _JoinChatChatEvent():
-return joinChat(_that);}
+return joinChat(_that);case _LoadChatChatEvent():
+return load(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -97,12 +99,13 @@ return joinChat(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _CreateChatChatEvent value)?  createChat,TResult? Function( _JoinChatChatEvent value)?  joinChat,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _CreateChatChatEvent value)?  createChat,TResult? Function( _JoinChatChatEvent value)?  joinChat,TResult? Function( _LoadChatChatEvent value)?  load,}){
 final _that = this;
 switch (_that) {
 case _CreateChatChatEvent() when createChat != null:
 return createChat(_that);case _JoinChatChatEvent() when joinChat != null:
-return joinChat(_that);case _:
+return joinChat(_that);case _LoadChatChatEvent() when load != null:
+return load(_that);case _:
   return null;
 
 }
@@ -119,11 +122,12 @@ return joinChat(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String recipientName,  String recipientId)?  createChat,TResult Function( String chatId)?  joinChat,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String recipientId)?  createChat,TResult Function( String chatId)?  joinChat,TResult Function()?  load,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateChatChatEvent() when createChat != null:
-return createChat(_that.recipientName,_that.recipientId);case _JoinChatChatEvent() when joinChat != null:
-return joinChat(_that.chatId);case _:
+return createChat(_that.recipientId);case _JoinChatChatEvent() when joinChat != null:
+return joinChat(_that.chatId);case _LoadChatChatEvent() when load != null:
+return load();case _:
   return orElse();
 
 }
@@ -141,11 +145,12 @@ return joinChat(_that.chatId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String recipientName,  String recipientId)  createChat,required TResult Function( String chatId)  joinChat,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String recipientId)  createChat,required TResult Function( String chatId)  joinChat,required TResult Function()  load,}) {final _that = this;
 switch (_that) {
 case _CreateChatChatEvent():
-return createChat(_that.recipientName,_that.recipientId);case _JoinChatChatEvent():
-return joinChat(_that.chatId);}
+return createChat(_that.recipientId);case _JoinChatChatEvent():
+return joinChat(_that.chatId);case _LoadChatChatEvent():
+return load();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -159,11 +164,12 @@ return joinChat(_that.chatId);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String recipientName,  String recipientId)?  createChat,TResult? Function( String chatId)?  joinChat,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String recipientId)?  createChat,TResult? Function( String chatId)?  joinChat,TResult? Function()?  load,}) {final _that = this;
 switch (_that) {
 case _CreateChatChatEvent() when createChat != null:
-return createChat(_that.recipientName,_that.recipientId);case _JoinChatChatEvent() when joinChat != null:
-return joinChat(_that.chatId);case _:
+return createChat(_that.recipientId);case _JoinChatChatEvent() when joinChat != null:
+return joinChat(_that.chatId);case _LoadChatChatEvent() when load != null:
+return load();case _:
   return null;
 
 }
@@ -175,10 +181,9 @@ return joinChat(_that.chatId);case _:
 
 
 class _CreateChatChatEvent implements ChatEvent {
-  const _CreateChatChatEvent({required this.recipientName, required this.recipientId});
+  const _CreateChatChatEvent({required this.recipientId});
   
 
- final  String recipientName;
  final  String recipientId;
 
 /// Create a copy of ChatEvent
@@ -191,16 +196,16 @@ _$CreateChatChatEventCopyWith<_CreateChatChatEvent> get copyWith => __$CreateCha
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateChatChatEvent&&(identical(other.recipientName, recipientName) || other.recipientName == recipientName)&&(identical(other.recipientId, recipientId) || other.recipientId == recipientId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateChatChatEvent&&(identical(other.recipientId, recipientId) || other.recipientId == recipientId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,recipientName,recipientId);
+int get hashCode => Object.hash(runtimeType,recipientId);
 
 @override
 String toString() {
-  return 'ChatEvent.createChat(recipientName: $recipientName, recipientId: $recipientId)';
+  return 'ChatEvent.createChat(recipientId: $recipientId)';
 }
 
 
@@ -211,7 +216,7 @@ abstract mixin class _$CreateChatChatEventCopyWith<$Res> implements $ChatEventCo
   factory _$CreateChatChatEventCopyWith(_CreateChatChatEvent value, $Res Function(_CreateChatChatEvent) _then) = __$CreateChatChatEventCopyWithImpl;
 @useResult
 $Res call({
- String recipientName, String recipientId
+ String recipientId
 });
 
 
@@ -228,10 +233,9 @@ class __$CreateChatChatEventCopyWithImpl<$Res>
 
 /// Create a copy of ChatEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? recipientName = null,Object? recipientId = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? recipientId = null,}) {
   return _then(_CreateChatChatEvent(
-recipientName: null == recipientName ? _self.recipientName : recipientName // ignore: cast_nullable_to_non_nullable
-as String,recipientId: null == recipientId ? _self.recipientId : recipientId // ignore: cast_nullable_to_non_nullable
+recipientId: null == recipientId ? _self.recipientId : recipientId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -306,6 +310,38 @@ as String,
 }
 
 /// @nodoc
+
+
+class _LoadChatChatEvent implements ChatEvent {
+  const _LoadChatChatEvent();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadChatChatEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ChatEvent.load()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$ChatState {
 
 
@@ -349,13 +385,14 @@ extension ChatStatePatterns on ChatState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialChatState value)?  initial,TResult Function( LoadingChatState value)?  loading,TResult Function( LoadedChatState value)?  loaded,TResult Function( ErrorChatState value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialChatState value)?  initial,TResult Function( LoadingChatState value)?  loading,TResult Function( LoadedChatState value)?  loaded,TResult Function( SuccessfulChatState value)?  succesful,TResult Function( ErrorChatState value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case InitialChatState() when initial != null:
 return initial(_that);case LoadingChatState() when loading != null:
 return loading(_that);case LoadedChatState() when loaded != null:
-return loaded(_that);case ErrorChatState() when error != null:
+return loaded(_that);case SuccessfulChatState() when succesful != null:
+return succesful(_that);case ErrorChatState() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -374,13 +411,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialChatState value)  initial,required TResult Function( LoadingChatState value)  loading,required TResult Function( LoadedChatState value)  loaded,required TResult Function( ErrorChatState value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialChatState value)  initial,required TResult Function( LoadingChatState value)  loading,required TResult Function( LoadedChatState value)  loaded,required TResult Function( SuccessfulChatState value)  succesful,required TResult Function( ErrorChatState value)  error,}){
 final _that = this;
 switch (_that) {
 case InitialChatState():
 return initial(_that);case LoadingChatState():
 return loading(_that);case LoadedChatState():
-return loaded(_that);case ErrorChatState():
+return loaded(_that);case SuccessfulChatState():
+return succesful(_that);case ErrorChatState():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -398,13 +436,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialChatState value)?  initial,TResult? Function( LoadingChatState value)?  loading,TResult? Function( LoadedChatState value)?  loaded,TResult? Function( ErrorChatState value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialChatState value)?  initial,TResult? Function( LoadingChatState value)?  loading,TResult? Function( LoadedChatState value)?  loaded,TResult? Function( SuccessfulChatState value)?  succesful,TResult? Function( ErrorChatState value)?  error,}){
 final _that = this;
 switch (_that) {
 case InitialChatState() when initial != null:
 return initial(_that);case LoadingChatState() when loading != null:
 return loading(_that);case LoadedChatState() when loaded != null:
-return loaded(_that);case ErrorChatState() when error != null:
+return loaded(_that);case SuccessfulChatState() when succesful != null:
+return succesful(_that);case ErrorChatState() when error != null:
 return error(_that);case _:
   return null;
 
@@ -422,12 +461,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ChatModel> chats)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ChatModel> chats)?  loaded,TResult Function( String currentChatId)?  succesful,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case InitialChatState() when initial != null:
 return initial();case LoadingChatState() when loading != null:
 return loading();case LoadedChatState() when loaded != null:
-return loaded(_that.chats);case ErrorChatState() when error != null:
+return loaded(_that.chats);case SuccessfulChatState() when succesful != null:
+return succesful(_that.currentChatId);case ErrorChatState() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -446,12 +486,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ChatModel> chats)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ChatModel> chats)  loaded,required TResult Function( String currentChatId)  succesful,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case InitialChatState():
 return initial();case LoadingChatState():
 return loading();case LoadedChatState():
-return loaded(_that.chats);case ErrorChatState():
+return loaded(_that.chats);case SuccessfulChatState():
+return succesful(_that.currentChatId);case ErrorChatState():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -469,12 +510,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ChatModel> chats)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ChatModel> chats)?  loaded,TResult? Function( String currentChatId)?  succesful,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case InitialChatState() when initial != null:
 return initial();case LoadingChatState() when loading != null:
 return loading();case LoadedChatState() when loaded != null:
-return loaded(_that.chats);case ErrorChatState() when error != null:
+return loaded(_that.chats);case SuccessfulChatState() when succesful != null:
+return succesful(_that.currentChatId);case ErrorChatState() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -486,8 +528,8 @@ return error(_that.message);case _:
 /// @nodoc
 
 
-class InitialChatState implements ChatState {
-  const InitialChatState();
+class InitialChatState extends ChatState {
+  const InitialChatState(): super._();
   
 
 
@@ -518,8 +560,8 @@ String toString() {
 /// @nodoc
 
 
-class LoadingChatState implements ChatState {
-  const LoadingChatState();
+class LoadingChatState extends ChatState {
+  const LoadingChatState(): super._();
   
 
 
@@ -550,8 +592,8 @@ String toString() {
 /// @nodoc
 
 
-class LoadedChatState implements ChatState {
-  const LoadedChatState({required final  List<ChatModel> chats}): _chats = chats;
+class LoadedChatState extends ChatState {
+  const LoadedChatState({required final  List<ChatModel> chats}): _chats = chats,super._();
   
 
  final  List<ChatModel> _chats;
@@ -622,8 +664,74 @@ as List<ChatModel>,
 /// @nodoc
 
 
-class ErrorChatState implements ChatState {
-  const ErrorChatState({required this.message});
+class SuccessfulChatState extends ChatState {
+  const SuccessfulChatState({required this.currentChatId}): super._();
+  
+
+ final  String currentChatId;
+
+/// Create a copy of ChatState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SuccessfulChatStateCopyWith<SuccessfulChatState> get copyWith => _$SuccessfulChatStateCopyWithImpl<SuccessfulChatState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SuccessfulChatState&&(identical(other.currentChatId, currentChatId) || other.currentChatId == currentChatId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,currentChatId);
+
+@override
+String toString() {
+  return 'ChatState.succesful(currentChatId: $currentChatId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $SuccessfulChatStateCopyWith<$Res> implements $ChatStateCopyWith<$Res> {
+  factory $SuccessfulChatStateCopyWith(SuccessfulChatState value, $Res Function(SuccessfulChatState) _then) = _$SuccessfulChatStateCopyWithImpl;
+@useResult
+$Res call({
+ String currentChatId
+});
+
+
+
+
+}
+/// @nodoc
+class _$SuccessfulChatStateCopyWithImpl<$Res>
+    implements $SuccessfulChatStateCopyWith<$Res> {
+  _$SuccessfulChatStateCopyWithImpl(this._self, this._then);
+
+  final SuccessfulChatState _self;
+  final $Res Function(SuccessfulChatState) _then;
+
+/// Create a copy of ChatState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? currentChatId = null,}) {
+  return _then(SuccessfulChatState(
+currentChatId: null == currentChatId ? _self.currentChatId : currentChatId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class ErrorChatState extends ChatState {
+  const ErrorChatState({required this.message}): super._();
   
 
  final  String message;

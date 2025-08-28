@@ -40,14 +40,13 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
   StreamSubscription? _streamSubscription;
   final ApiClient _apiClient;
-  late String currentChat;
 
   void _onSendMessage(
     _SendMessageMessageEvent event,
     Emitter<MessageState> emit,
   ) {
     try {
-      _apiClient.sendMessage(message: event.message, chatId: currentChat);
+      _apiClient.sendMessage(message: event.message, chatId: event.chatId);
     } catch (e) {
       emit(ErrorMessageState(message: e.toString()));
     }

@@ -1,8 +1,9 @@
 import 'package:chat_application/common/app_router/app_router.dart';
 import 'package:chat_application/common/api/api_client/api_client.dart';
-import 'package:chat_application/common/state_management/auth/auth_bloc.dart';
 import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
+import 'package:chat_application/common/state_management/firebase_auth_bloc/firebase_auth_bloc.dart';
 import 'package:chat_application/common/state_management/members/members_bloc.dart';
+import 'package:chat_application/common/state_management/message_bloc/message_bloc.dart';
 import 'package:chat_application/common/theme/cubit/theme_cubit.dart';
 import 'package:chat_application/common/theme/repository/theme_repository.dart';
 import 'package:chat_application/common/theme/repository/theme_repository_interface.dart';
@@ -27,8 +28,6 @@ Future<void> setup() async {
   final credential = FirebaseAuth.instance;
   getIt.registerLazySingleton<FirebaseAuth>(() => credential);
 
-  getIt.registerSingleton<AppRouter>(AppRouter());
-
   final prefs = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => prefs);
 
@@ -41,8 +40,14 @@ Future<void> setup() async {
 
   _initTheme();
   _initAuth();
+
+  getIt.registerSingleton<AppRouter>(
+    AppRouter(firebaseAuthBloc: getIt<FirebaseAuthBloc>()),
+  );
+
   _initMembers();
   _initChat();
+  _initMessage();
 }
 
 void _initTheme() {
@@ -63,8 +68,15 @@ void _initAuth() {
     ),
   );
 
-  getIt.registerFactory<AuthBloc>(
-    () => AuthBloc(authRepository: getIt<AuthRepositoryInterface>()),
+  // getIt.registerFactory<AuthBloc>(
+  //   () => AuthBloc(authRepository: getIt<AuthRepositoryInterface>()),
+  // );
+
+  getIt.registerFactory<FirebaseAuthBloc>(
+    () => FirebaseAuthBloc(
+      authRepository: getIt<AuthRepositoryInterface>(),
+      firebaseAuth: getIt<FirebaseAuth>(),
+    ),
   );
 }
 
@@ -81,5 +93,11 @@ void _initMembers() {
 void _initChat() {
   getIt.registerFactory<ChatBloc>(
     () => ChatBloc(apiClient: getIt<ApiClient>()),
+  );
+}
+
+void _initMessage() {
+  getIt.registerFactory<MessageBloc>(
+    () => MessageBloc(apiClient: getIt<ApiClient>()),
   );
 }

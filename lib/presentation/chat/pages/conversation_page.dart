@@ -1,34 +1,28 @@
 import 'package:chat_application/common/state_management/chat/chat_bloc.dart';
-import 'package:chat_application/presentation/chat/widgets/members_inheridet_widget.dart';
+import 'package:chat_application/common/state_management/message_bloc/message_bloc.dart';
 import 'package:chat_application/presentation/chat/widgets/message_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConversationPage extends StatefulWidget {
-  const ConversationPage({
-    super.key,
-    this.chatId,
-    required this.recipientId,
-    required this.recipientName,
-  });
+  const ConversationPage({super.key, this.chatId, required this.recipientId});
   final String? chatId;
   final String recipientId;
-  final String recipientName;
 
   @override
   State<ConversationPage> createState() => _ConversationPageState();
 }
 
 class _ConversationPageState extends State<ConversationPage> {
+  String? _createdChatId;
+
   @override
   void initState() {
     if (widget.chatId == null) {
       context.read<ChatBloc>().add(
-        ChatEvent.createChat(
-          recipientName: widget.recipientName,
-          recipientId: widget.recipientId,
-        ),
+        ChatEvent.createChat(recipientId: widget.recipientId),
       );
+      _createdChatId = context.watch<ChatBloc>().state.currentChat;
     } else {
       context.read<ChatBloc>().add(ChatEvent.joinChat(chatId: widget.chatId!));
     }
@@ -43,20 +37,20 @@ class _ConversationPageState extends State<ConversationPage> {
       body: Column(
         children: [
           Expanded(
-            child: BlocBuilder<ChatBloc, ChatState>(
+            child: BlocBuilder<MessageBloc, MessageState>(
               builder: (context, state) {
                 switch (state) {
-                  case Loading():
+                  case LoadingMessageState():
                     return CircularProgressIndicator();
-                  case Loaded():
+                  case LoadedMessageState():
                     return ListView.builder(
-                      itemCount: state.chatModels.length,
+                      itemCount: state.messages.length,
                       itemBuilder: (context, index) => ListTile(
-                        title: Text(state.chatModels[index].message),
-                        subtitle: Text(state.chatModels[index].userName),
+                        title: Text(state.messages[index].message),
+                        subtitle: Text(state.messages[index].userName),
                       ),
                     );
-                  case Failure():
+                  case ErrorMessageState():
                     return Text(state.message);
                   default:
                     return const Text('No data');
@@ -64,7 +58,7 @@ class _ConversationPageState extends State<ConversationPage> {
               },
             ),
           ),
-          MessageBar(),
+          MessageBar(chatId: widget.chatId ?? _createdChatId),
         ],
       ),
     );

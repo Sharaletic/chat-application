@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:chat_application/common/dependence/setup.dart';
 import 'package:chat_application/common/state_management/firebase_auth_bloc/firebase_auth_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthGuard extends AutoRouteGuard {
   AuthGuard({required FirebaseAuthBloc firebaseAuthBloc})

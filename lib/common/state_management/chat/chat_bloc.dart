@@ -17,12 +17,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           _onCreateChat(event, emit);
         case _JoinChatChatEvent():
           _onJoinChat(event, emit);
+        case _LoadChatChatEvent():
+          await _onLoad(event, emit);
       }
     });
   }
 
   final ApiClient _apiClient;
-  late String currentChat;
 
   Future<void> _onCreateChat(
     _CreateChatChatEvent event,
@@ -31,10 +32,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       final chatId = await _apiClient.createChat(
         recipientId: event.recipientId,
-        recipientName: event.recipientName,
       );
       add(ChatEvent.joinChat(chatId: chatId));
-      currentChat = chatId;
+      emit(ChatState.succesful(currentChatId: chatId));
     } catch (e) {
       emit(ErrorChatState(message: e.toString()));
     }
@@ -43,6 +43,19 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   void _onJoinChat(_JoinChatChatEvent event, Emitter<ChatState> emit) {
     try {
       _apiClient.joinChat(chatId: event.chatId);
+    } catch (e) {
+      emit(ChatState.error(message: e.toString()));
+    }
+  }
+
+  Future<void> _onLoad(
+    _LoadChatChatEvent event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      emit(ChatState.loading());
+      final chats = await _apiClient.getChats();
+      emit(ChatState.loaded(chats: chats));
     } catch (e) {
       emit(ChatState.error(message: e.toString()));
     }

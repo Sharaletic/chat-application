@@ -125,11 +125,11 @@ return getMessages(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( MessageModel message)?  messageReceived,TResult Function( String message)?  sendMessage,TResult Function( String chatId)?  getMessages,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( MessageModel message)?  messageReceived,TResult Function( String message,  String chatId)?  sendMessage,TResult Function( String chatId)?  getMessages,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MessageReceivedMessageEvent() when messageReceived != null:
 return messageReceived(_that.message);case _SendMessageMessageEvent() when sendMessage != null:
-return sendMessage(_that.message);case _GetMessagesMessageEvent() when getMessages != null:
+return sendMessage(_that.message,_that.chatId);case _GetMessagesMessageEvent() when getMessages != null:
 return getMessages(_that.chatId);case _:
   return orElse();
 
@@ -148,11 +148,11 @@ return getMessages(_that.chatId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( MessageModel message)  messageReceived,required TResult Function( String message)  sendMessage,required TResult Function( String chatId)  getMessages,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( MessageModel message)  messageReceived,required TResult Function( String message,  String chatId)  sendMessage,required TResult Function( String chatId)  getMessages,}) {final _that = this;
 switch (_that) {
 case _MessageReceivedMessageEvent():
 return messageReceived(_that.message);case _SendMessageMessageEvent():
-return sendMessage(_that.message);case _GetMessagesMessageEvent():
+return sendMessage(_that.message,_that.chatId);case _GetMessagesMessageEvent():
 return getMessages(_that.chatId);case _:
   throw StateError('Unexpected subclass');
 
@@ -170,11 +170,11 @@ return getMessages(_that.chatId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( MessageModel message)?  messageReceived,TResult? Function( String message)?  sendMessage,TResult? Function( String chatId)?  getMessages,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( MessageModel message)?  messageReceived,TResult? Function( String message,  String chatId)?  sendMessage,TResult? Function( String chatId)?  getMessages,}) {final _that = this;
 switch (_that) {
 case _MessageReceivedMessageEvent() when messageReceived != null:
 return messageReceived(_that.message);case _SendMessageMessageEvent() when sendMessage != null:
-return sendMessage(_that.message);case _GetMessagesMessageEvent() when getMessages != null:
+return sendMessage(_that.message,_that.chatId);case _GetMessagesMessageEvent() when getMessages != null:
 return getMessages(_that.chatId);case _:
   return null;
 
@@ -253,10 +253,11 @@ as MessageModel,
 
 
 class _SendMessageMessageEvent implements MessageEvent {
-  const _SendMessageMessageEvent({required this.message});
+  const _SendMessageMessageEvent({required this.message, required this.chatId});
   
 
  final  String message;
+ final  String chatId;
 
 /// Create a copy of MessageEvent
 /// with the given fields replaced by the non-null parameter values.
@@ -268,16 +269,16 @@ _$SendMessageMessageEventCopyWith<_SendMessageMessageEvent> get copyWith => __$S
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SendMessageMessageEvent&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SendMessageMessageEvent&&(identical(other.message, message) || other.message == message)&&(identical(other.chatId, chatId) || other.chatId == chatId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,message,chatId);
 
 @override
 String toString() {
-  return 'MessageEvent.sendMessage(message: $message)';
+  return 'MessageEvent.sendMessage(message: $message, chatId: $chatId)';
 }
 
 
@@ -288,7 +289,7 @@ abstract mixin class _$SendMessageMessageEventCopyWith<$Res> implements $Message
   factory _$SendMessageMessageEventCopyWith(_SendMessageMessageEvent value, $Res Function(_SendMessageMessageEvent) _then) = __$SendMessageMessageEventCopyWithImpl;
 @useResult
 $Res call({
- String message
+ String message, String chatId
 });
 
 
@@ -305,9 +306,10 @@ class __$SendMessageMessageEventCopyWithImpl<$Res>
 
 /// Create a copy of MessageEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? message = null,Object? chatId = null,}) {
   return _then(_SendMessageMessageEvent(
 message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,chatId: null == chatId ? _self.chatId : chatId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
